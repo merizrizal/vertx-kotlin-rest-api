@@ -1,3 +1,3 @@
-# Build Simple REST API Using Vert.x in Kotlin
+# Vert.x REST API Authentication and Authorization in Kotlin
 
-You can find my article about this on https://merizrizal.medium.com/build-simple-rest-api-using-vert-x-in-kotlin-39b2507cc4e3
+You can find my article about this on https://merizrizal.medium.com/vert-x-rest-api-authentication-and-authorization-in-kotlin-58520848b4b
