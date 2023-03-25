@@ -1,6 +1,7 @@
 buildscript {
     ext.kotlin_version = '1.8.0'
     ext.vertx_version = '4.4.0'
+    ext.zipkin_version = '5.15.0'
 
     repositories {
         mavenCentral()
@@ -34,12 +35,45 @@ dependencies {
     implementation "io.vertx:vertx-core:$vertx_version"
     implementation "io.vertx:vertx-lang-kotlin:$vertx_version"
 
+    // Vertx Codegen and Proxy
+//    implementation "io.vertx:vertx-service-proxy:$vertx_version"
+    annotationProcessor "io.vertx:vertx-codegen:$vertx_version:processor"
+//    annotationProcessor "io.vertx:vertx-service-proxy:$vertx_version"
+
     // Vertx Web
     implementation "io.vertx:vertx-web:$vertx_version"
 
     // Vertx Rxjava
     implementation "io.vertx:vertx-rx-java3:$vertx_version"
     implementation "io.vertx:vertx-rx-java3-gen:$vertx_version"
+
+    // Zipkin
+    implementation "io.zipkin.brave:brave:$zipkin_version"
+    implementation "io.zipkin.brave:brave-instrumentation-http:$zipkin_version"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += ["build/generated/source/java"]
+        }
+    }
+}
+
+task annotationProcessing(type: JavaCompile) {
+    group = "other"
+    description = "Generate vertx codegen"
+    source = sourceSets.main.java
+    configurations.implementation.setCanBeResolved(true)
+    options.annotationProcessorPath = configurations.annotationProcessor
+    classpath = configurations.implementation
+    options.debugOptions.debugLevel = "source,lines,vars"
+    options.compilerArgs = [
+            "-proc:only",
+            "-processor", "io.vertx.codegen.CodeGenProcessor",
+            "-Acodegen.output=${projectDir}/src/main"
+    ]
+    destinationDirectory = layout.buildDirectory.dir("${buildDir}/generated/source/java")
 }
 
 jar {
@@ -68,4 +102,8 @@ compileKotlin {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11
     }
+}
+
+compileJava {
+    dependsOn annotationProcessing
 }
