@@ -6,7 +6,6 @@ import brave.sampler.Sampler;
 import io.vertx.codegen.annotations.DataObject;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.tracing.TracingOptions;
-import zipkin2.reporter.AsyncReporter;
 
 import java.util.Objects;
 
@@ -136,16 +135,17 @@ public class ZipkinTracingOptions extends TracingOptions {
         if (httpTracing != null) {
             return new ZipkinTracer(false, httpTracing, null);
         } else if (senderOptions != null) {
-            String localServiceName = serviceName;
-            VertxSender sender = new VertxSender(senderOptions);
-            Tracing tracing = Tracing
-                    .newBuilder()
-                    .supportsJoin(supportsJoin)
-                    .localServiceName(localServiceName)
-                    .spanReporter(AsyncReporter.builder(sender).build())
-                    .sampler(sampler)
-                    .build();
-            return new ZipkinTracer(true, tracing, sender);
+//            String localServiceName = serviceName;
+//            VertxSender sender = new VertxSender(senderOptions);
+//            Tracing tracing = Tracing
+//                    .newBuilder()
+//                    .supportsJoin(supportsJoin)
+//                    .localServiceName(localServiceName)
+//                    .spanReporter(AsyncReporter.builder(sender).build())
+//                    .sampler(sampler)
+//                    .build();
+//            return new ZipkinTracer(true, tracing, sender);
+            return null;
         } else {
             return null;
         }

@@ -5,16 +5,12 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
-import io.vertx.core.VertxOptions;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpClient;
-import io.vertx.core.http.HttpClientRequest;
 import io.vertx.core.http.HttpClientResponse;
 import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.RequestOptions;
-import io.vertx.core.spi.VertxTracerFactory;
-import io.vertx.core.tracing.TracingOptions;
 import zipkin2.Call;
 import zipkin2.Callback;
 import zipkin2.codec.Encoding;
@@ -43,11 +39,11 @@ public class VertxSender extends Sender {
     private final HttpSenderOptions options;
     private final String endpoint;
 
-    public VertxSender(HttpSenderOptions options) {
+    public VertxSender(HttpSenderOptions options, Vertx vertx) {
         this.options = new HttpSenderOptions(options);
         this.endpoint = options.getSenderEndpoint();
-        this.vertx = Vertx.vertx(new VertxOptions().setTracingOptions(new TracingOptions().setFactory(VertxTracerFactory.NOOP)));
-        this.client = vertx.createHttpClient(options);
+        this.vertx = vertx;
+        this.client =  this.vertx.createHttpClient(options);
     }
 
     HttpSenderOptions options() {
@@ -178,7 +174,6 @@ public class VertxSender extends Sender {
     @Override
     public void close() throws IOException {
         client.close();
-        vertx.close();
     }
 }
 

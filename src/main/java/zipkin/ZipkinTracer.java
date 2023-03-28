@@ -2,7 +2,11 @@ package zipkin;
 
 import brave.Span;
 import brave.Tracing;
-import brave.http.*;
+import brave.http.HttpClientAdapter;
+import brave.http.HttpClientHandler;
+import brave.http.HttpServerAdapter;
+import brave.http.HttpServerHandler;
+import brave.http.HttpTracing;
 import brave.propagation.B3SingleFormat;
 import brave.propagation.Propagation;
 import brave.propagation.TraceContext;
