@@ -4,7 +4,7 @@ buildscript {
     ext.kotlin_version = '1.8.0'
     ext.vertx_version = '4.4.0'
     ext.zipkin_version = '5.15.0'
-    ext.generated_java_src_dir = "${buildDir}/generated/source/java"
+    ext.generated_java_src_dir = "${buildDir}/generated/sources/annotationProcessor/java"
 
     repositories {
         mavenCentral()
@@ -94,8 +94,7 @@ tasks.register('cleanAndJar') {
     group = 'build'
     description = 'Clean and create jar'
 
-    dependsOn clean
-    dependsOn jar
+    dependsOn clean, jar
 }
 
 compileJava {
