@@ -2,14 +2,6 @@ buildscript {
     ext.kotlin_version = '1.9.10'
     ext.vertx_version = '4.4.5'
 
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-
     group = 'com.merizrizal'
     version = '1.0.0'
 }
@@ -22,9 +14,6 @@ plugins {
 repositories {
     mavenCentral()
 }
-
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
 
 dependencies {
     // Kotlin
@@ -64,8 +53,14 @@ tasks.register('cleanAndJar') {
     dependsOn jar
 }
 
-compileKotlin {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17
+//java {
+//    toolchain {
+//        languageVersion.set(JavaLanguageVersion.of(17))
+//    }
+//}
+
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
