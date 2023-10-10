@@ -1,6 +1,6 @@
 buildscript {
-    ext.kotlin_version = '1.6.10'
-    ext.vertx_version = '4.2.4'
+    ext.kotlin_version = '1.9.10'
+    ext.vertx_version = '4.4.5'
 
     repositories {
         mavenCentral()
@@ -23,8 +23,8 @@ repositories {
     mavenCentral()
 }
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 dependencies {
     // Kotlin
@@ -56,7 +56,7 @@ jar {
     }
 }
 
-task cleanAndJar {
+tasks.register('cleanAndJar') {
     group = 'build'
     description = 'Clean and create jar'
 
@@ -66,6 +66,6 @@ task cleanAndJar {
 
 compileKotlin {
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11
+        jvmTarget = JavaVersion.VERSION_17
     }
 }
