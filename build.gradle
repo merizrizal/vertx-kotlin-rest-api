@@ -1,8 +1,8 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 buildscript {
-    ext.kotlin_version = '1.9.10'
-    ext.vertx_version = '4.4.5'
+    ext.kotlin_version = '1.9.21'
+    ext.vertx_version = '4.5.1'
 
     group = 'com.merizrizal'
     version = '1.0.0'
@@ -41,7 +41,7 @@ dependencies {
 sourceSets {
     main {
         java {
-            srcDirs += ["${buildDir}/generated/sources/java"]
+            srcDirs += [layout.buildDirectory.dir("generated/sources/java")]
         }
     }
 }
@@ -61,8 +61,8 @@ jar {
 }
 
 tasks.register('generateConfig', Copy) {
-    from "${projectDir}/src/main/resources/template/Config.java.template"
-    into "${buildDir}/generated/sources/java/config"
+    from layout.projectDirectory.file("src/main/resources/template/Config.java.template")
+    into layout.buildDirectory.dir("generated/sources/java/config")
 
     def props = new Properties()
     file("env.properties").withInputStream { props.load(it) }
@@ -95,6 +95,6 @@ compileJava {
 
 kotlin {
     jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
