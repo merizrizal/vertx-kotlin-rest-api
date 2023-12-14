@@ -38,10 +38,12 @@ dependencies {
     implementation 'com.ongres.scram:client:2.1'
 }
 
+String generatedJavaPath = layout.buildDirectory.dir("generated/sources/java").get().asFile.path
+
 sourceSets {
     main {
         java {
-            srcDirs += [layout.buildDirectory.dir("generated/sources/java")]
+            srcDirs += [generatedJavaPath]
         }
     }
 }
@@ -62,7 +64,7 @@ jar {
 
 tasks.register('generateConfig', Copy) {
     from layout.projectDirectory.file("src/main/resources/template/Config.java.template")
-    into layout.buildDirectory.dir("generated/sources/java/config")
+    into "${generatedJavaPath}/config"
 
     def props = new Properties()
     file("env.properties").withInputStream { props.load(it) }
@@ -94,7 +96,5 @@ compileJava {
 }
 
 kotlin {
-    jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
-    }
+    jvmToolchain(21)
 }
