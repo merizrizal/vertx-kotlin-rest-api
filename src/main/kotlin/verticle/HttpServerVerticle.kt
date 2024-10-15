@@ -21,7 +21,7 @@ class HttpServerVerticle : AbstractVerticle() {
         val config = Config()
 
         val pgConnectOptions = PgConnectOptions()
-            .setPort(5432)
+            .setPort(config.pgPort)
             .setHost(config.pgHost)
             .setDatabase(config.pgDatabase)
             .setUser(config.pgUser)
@@ -46,7 +46,7 @@ class HttpServerVerticle : AbstractVerticle() {
         vertx
             .createHttpServer()
             .requestHandler(router)
-            .rxListen(8282)
+            .rxListen(config.httpPort)
             .subscribe(
                 { promise.complete() },
                 { failure -> promise.fail(failure.cause) })
