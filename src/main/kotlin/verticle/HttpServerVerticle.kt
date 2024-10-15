@@ -9,27 +9,32 @@ import io.vertx.rxjava3.core.AbstractVerticle
 import io.vertx.rxjava3.ext.web.Router
 import io.vertx.rxjava3.ext.web.RoutingContext
 import io.vertx.rxjava3.ext.web.handler.BodyHandler
-import io.vertx.rxjava3.pgclient.PgPool
+import io.vertx.rxjava3.pgclient.PgBuilder
+import io.vertx.rxjava3.sqlclient.Pool
 import io.vertx.rxjava3.sqlclient.Tuple
 import io.vertx.sqlclient.PoolOptions
 
 class HttpServerVerticle : AbstractVerticle() {
-    private lateinit var pgPoolClient: PgPool
+    private lateinit var pgPoolClient: Pool
 
     override fun start(promise: Promise<Void>) {
+        val config = Config()
+
         val pgConnectOptions = PgConnectOptions()
             .setPort(5432)
-            .setHost(Config.PG_HOST)
-            .setDatabase(Config.PG_DATABASE)
-            .setUser(Config.PG_USER)
-            .setPassword(Config.PG_PASSWORD)
+            .setHost(config.pgHost)
+            .setDatabase(config.pgDatabase)
+            .setUser(config.pgUser)
+            .setPassword(config.pgPassword)
 
         val poolOptions = PoolOptions().setMaxSize(5)
 
-        pgPoolClient = PgPool.newInstance(io.vertx.pgclient.PgPool.pool(
-            vertx.delegate,
-            pgConnectOptions,
-            poolOptions))
+        pgPoolClient = PgBuilder.pool()
+            .with(poolOptions)
+            .connectingTo(pgConnectOptions)
+            .using(vertx)
+            .build()
+
 
         val router = Router.router(vertx).apply {
             get("/api/users").handler(this@HttpServerVerticle::getUsers)
